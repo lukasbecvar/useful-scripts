@@ -29,9 +29,29 @@ case $selector in
 		sudo rm -r ~/.cache/*
 		sudo rm -r ~/.local/share/Trash/*
 
+		# delete others directories
+		sudo rm -rf ~/.audacity-data
+		sudo rm -rf ~/.dbclient
+		sudo rm -rf ~/.android
+		sudo rm -rf ~/.mozilla
+		sudo rm -rf ~/.docker
+		sudo rm -rf ~/.dotnet
+		sudo rm -rf ~/.java
+		sudo rm -rf ~/.npm
+
+		# delete others files
+		sudo rm -rf ~/.sudo_as_admin_successful
+		sudo rm -rf ~/.xsession-errors
+		sudo rm -rf ~/.python_history
+		sudo rm -rf ~/.Xauthority
+		sudo rm -rf ~/.wget-hsts
+		sudo rm -rf ~/.gtkrc-2.0
+		sudo rm -rf ~/.lesshst
+
 		# poweroff
 		echo "poweroff system!!!"
-		sudo poweroff
+		#sudo poweroff
+		sudo reboot
 	;;
     no|NO)
 		echo "Process exited."

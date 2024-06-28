@@ -1,15 +1,18 @@
 #!/bin/bash
 
-# this script clones all GitHub repositories for a user, zips them individually, and then deletes the directories
+# This script clones all GitHub repositories for a user, zips them individually, and then deletes the directories
 
-# gitHub username and personal access token
+# github username and personal access token
 github_username="lordbecvold"
 github_token="api-token"
 
 # output directory for cloned repositories
 output_directory="./github-repositories"
 
-# gitHub API URL to fetch user repositories
+# create the output directory if it doesn't exist
+mkdir -p ${output_directory}
+
+# github API URL to fetch user repositories
 api_url="https://api.github.com/user/repos"
 
 # fetch repositories using GitHub API and clone them
@@ -40,8 +43,8 @@ for repo_url in ${repositories}; do
         continue
     fi
 
-    # zip the cloned repository directly into the output directory
-    zip -r "${output_directory}/${repo_name}.zip" "${repo_path}"
+    # change directory to the output directory and zip the cloned repository folder
+    (cd ${output_directory} && zip -r "${repo_name}.zip" "${repo_name}")
 
     # display success or failure message for zipping
     if [ $? -eq 0 ]; then

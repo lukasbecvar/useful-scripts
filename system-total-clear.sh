@@ -10,7 +10,6 @@ read selector
 
 case $selector in
 	yes|YES)
-		
 		# system update
 		echo "System update..."
 		sudo apt update -y
@@ -29,29 +28,44 @@ case $selector in
 		sudo rm -r ~/.cache/*
 		sudo rm -r ~/.local/share/Trash/*
 
-		# delete others directories
+		# delete home directories
+		sudo rm -rf ~/.apport-ignore.xml
+		sudo rm -rf ~/.xsession-errors
+		sudo rm -rf ~/.pam_environment
+		sudo rm -rf ~/.python_history
 		sudo rm -rf ~/.audacity-data
+		sudo rm -rf ~/.Xauthority
+		sudo rm -rf ~/.gtkrc-2.0
+		sudo rm -rf ~/.wget-hsts
 		sudo rm -rf ~/.dbclient
+		sudo rm -rf ~/.xinputrc 
+		sudo rm -rf ~/.anydesk
 		sudo rm -rf ~/.android
 		sudo rm -rf ~/.mozilla
+		sudo rm -rf ~/.lesshst
 		sudo rm -rf ~/.docker
 		sudo rm -rf ~/.dotnet
+		sudo rm -rf ~/.rpmdb
+		sudo rm -rf ~/.cargo
 		sudo rm -rf ~/.java
 		sudo rm -rf ~/.npm
+		sudo rm -rf ~/.pki
+		sudo rm -rf ~/.rnd
 
-		# delete others files
-		sudo rm -rf ~/.sudo_as_admin_successful
-		sudo rm -rf ~/.xsession-errors
-		sudo rm -rf ~/.python_history
-		sudo rm -rf ~/.Xauthority
-		sudo rm -rf ~/.wget-hsts
-		sudo rm -rf ~/.gtkrc-2.0
-		sudo rm -rf ~/.lesshst
+		# delete root directories
+		sudo rm -rf /root/.python_history
+		sudo rm -rf /root/.anydesk
+		sudo rm -rf /root/.lesshst
+		sudo rm -rf /root/.docker
+		sudo rm -rf /root/.cache
+		sudo rm -rf /root/.rpmdb
+		sudo rm -rf /root/.dbus
+		sudo rm -rf /root/.npm
 
 		# poweroff
 		echo "poweroff system!!!"
-		#sudo poweroff
-		sudo reboot
+		sudo poweroff
+		#sudo reboot
 	;;
     no|NO)
 		echo "Process exited."

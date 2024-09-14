@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# delete all images & container data
+
 # clear console
 clear
 

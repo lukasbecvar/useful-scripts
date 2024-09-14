@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# download instagram content from profile list
+
 # define colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'

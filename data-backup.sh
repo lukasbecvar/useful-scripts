@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# backup data folder to external drive
+
 # source local directory
 source_dir="/home/lukas/data"
 

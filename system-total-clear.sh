@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# clear system temp & user home
+
 # clear console
 clear
 

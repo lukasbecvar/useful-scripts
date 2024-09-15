@@ -14,7 +14,7 @@ server_ip="89.168.77.11"
 remote_backup_path="/services/vps-backup.tar.gz"
 
 # backup dir format
-backup_root="/home/lukas/Downloads/ffff"
+backup_root="/media/lukas/external-drive/backups"
 year=$(date +"%Y")
 date_format=$(date +"%d_%m_%Y")
 backup_dest="$backup_root/$year/$date_format"
@@ -39,7 +39,7 @@ if ssh ${server_user}@${server_ip} "[ -f ${remote_backup_path} ]"; then
     scp ${server_user}@${server_ip}:${remote_backup_path} ${backup_dest}
     
     # notify that the backup has been downloaded
-    echo "${GREEN}Backup successfully downloaded to ${YELLOW}{$backup_dest}/vps-backup.tar.gz${NC}"
+    echo "${GREEN}Backup successfully downloaded to ${YELLOW}$backup_dest/vps-backup.tar.gz${NC}"
     
     # remove the backup file from the remote server after download
     ssh ${server_user}@${server_ip} "rm -rf ${remote_backup_path}"

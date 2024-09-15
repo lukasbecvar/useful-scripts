@@ -9,7 +9,7 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # vps connection properties
-server_user="lordbecvold"
+server_user="serveruser"
 server_ip="89.168.77.11"
 remote_backup_path="/services/vps-backup.tar.gz"
 

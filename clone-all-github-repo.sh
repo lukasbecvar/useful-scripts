@@ -9,6 +9,9 @@ github_token="api-token"
 # output directory for cloned repositories
 output_directory="./github-repositories"
 
+# delete output directory if it already exists
+rm -rf ${output_directory}
+
 # create the output directory if it doesn't exist
 mkdir -p ${output_directory}
 

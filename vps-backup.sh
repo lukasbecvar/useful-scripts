@@ -25,10 +25,10 @@ mkdir -p "$backup_dest"
 # notify that the backup script is starting on the server
 echo "${CYAN}Starting backup script on the server ${BLUE}$server_user@$server_ip${CYAN}${NC}"
 
-# run the backup process on the remote server
+# run the clean process
 ssh ${server_user}@${server_ip} "sh /services/x-panel.sh b"
 
-# run additional process on the server (perhaps related to finalizing the backup)
+# run data backup on the server
 ssh ${server_user}@${server_ip} "sh /services/x-panel.sh d"
 
 # check if the backup file exists on the remote server

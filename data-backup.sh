@@ -39,4 +39,4 @@ sh ./vps-backup.sh
 sh ./projects/clone-all-github-repos.sh
 
 # run instagram downloader
-sh ./ig-downloads/ig-downloader.sh 
+bash ./ig-downloads/ig-downloader.sh 

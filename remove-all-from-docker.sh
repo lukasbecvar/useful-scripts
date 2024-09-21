@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# delete all images & container data
-
 # clear console
 clear
 
@@ -14,5 +12,9 @@ sudo docker rm $(sudo docker ps -aq)
 # remove all docker images
 sudo docker rmi $(sudo docker images -q)
 
+# remove networks
+docker network rm $(docker network ls -q)
+
 # remove all docker volumes
-sudo docker system prune
+docker volume rm $(docker volume ls -q)
+docker system prune -a --volumes

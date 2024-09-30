@@ -21,7 +21,7 @@ server_ip="server-ip"
 server_backup_path="/services/vps-backup.tar.gz"
 
 # github auth token for backup github repositories
-github_username="lordbecvold"
+github_username="lukasbecvar"
 github_token="github-token"
 
 # github repositories backup path

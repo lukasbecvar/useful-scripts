@@ -3,7 +3,7 @@
 # This script clones all GitHub repositories for a user, zips them individually, and then deletes the directories
 
 # github username and personal access token
-github_username="lordbecvold"
+github_username="lukasbecvar"
 github_token="api-token"
 
 # output directory for cloned repositories

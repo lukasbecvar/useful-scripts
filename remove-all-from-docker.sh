@@ -13,8 +13,8 @@ sudo docker rm $(sudo docker ps -aq)
 sudo docker rmi $(sudo docker images -q)
 
 # remove networks
-docker network rm $(docker network ls -q)
+sudo docker network rm $(docker network ls -q)
 
 # remove all docker volumes
-docker volume rm $(docker volume ls -q)
-docker system prune -a --volumes
+sudo docker volume rm $(docker volume ls -q)
+sudo docker system prune -a --volumes

@@ -2,8 +2,6 @@
 import os
 import re
 
-# script for validate and sort xs data storage
-
 # path to the storage folder
 STORAGE_PATH = '/data/storage'
 
@@ -14,7 +12,7 @@ YELLOW = '\033[93m'
 CYAN = '\033[96m'
 RESET = '\033[0m'
 
-# function to check if the root directory contains only folders
+# check if the root directory contains only folders
 def check_root_directory(path):
     for item in os.listdir(path):
         item_path = os.path.join(path, item)
@@ -23,12 +21,12 @@ def check_root_directory(path):
             return False
     return True
 
-# function to validate if a file name matches the expected format
+# validate if a file name matches the expected format
 def is_valid_file_name(folder_name, file_name):
     match = re.match(rf'^{re.escape(folder_name)}_(\d+)\.[a-zA-Z0-9]+$', file_name)
     return bool(match)
 
-# function to validate files in a folder
+# validate files in a folder
 def validate_folder(folder_path):
     folder_name = os.path.basename(folder_path)
     files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
@@ -51,7 +49,7 @@ def validate_folder(folder_path):
 
     return True
 
-# function to rename files in a folder only if numbers are missing in the sequence
+# rename files in a folder only if numbers are missing in the sequence
 def rename_files_in_folder_if_needed(folder_path):
     folder_name = os.path.basename(folder_path)
     files = sorted([f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f)) and not f.startswith('.') and not f.endswith('~')])
@@ -93,13 +91,13 @@ def rename_files_in_folder_if_needed(folder_path):
         return True
     return False
 
-# function to validate the entire storage
+# validate the entire storage
 def validate_storage(path):
     if not check_root_directory(path):
         return False
 
     folders = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
-    
+
     for folder in folders:
         # ignore the folder named '1mix'
         if folder == '1mix':

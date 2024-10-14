@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# update discord app without official package
+
 get_installed_version() {
     local installed_version=$(dpkg-query -W -f='${Version}\n' discord 2>/dev/null)
     echo $installed_version

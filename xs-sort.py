@@ -2,6 +2,8 @@
 import os
 import re
 
+# script for validate and sort xs data storage
+
 # path to the storage folder
 STORAGE_PATH = '/data/storage'
 

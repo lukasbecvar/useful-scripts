@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# delete all resources from docker env
+
 # clear console
 clear
 

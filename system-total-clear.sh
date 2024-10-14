@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# clear system temp & user home
-
 # clear console
 clear
 
@@ -40,19 +38,24 @@ case $selector in
 		sudo rm -rf ~/.gtkrc-2.0
 		sudo rm -rf ~/.wget-hsts
 		sudo rm -rf ~/.dbclient
-		sudo rm -rf ~/.xinputrc 
+		sudo rm -rf ~/.xinputrc
+		sudo rm -rf ~/.minikube
 		sudo rm -rf ~/.anydesk
 		sudo rm -rf ~/.android
 		sudo rm -rf ~/.mozilla
 		sudo rm -rf ~/.lesshst
 		sudo rm -rf ~/.docker
 		sudo rm -rf ~/.dotnet
+		sudo rm -rf ~/.spotdl
 		sudo rm -rf ~/.rpmdb
 		sudo rm -rf ~/.cargo
 		sudo rm -rf ~/.java
 		sudo rm -rf ~/.npm
 		sudo rm -rf ~/.pki
 		sudo rm -rf ~/.rnd
+		sudo rm -rf ~/.java
+		sudo rm -rf ~/.jdks
+		sudo rm -rf ~/.m2
 
 		# delete root directories
 		sudo rm -rf /root/.python_history

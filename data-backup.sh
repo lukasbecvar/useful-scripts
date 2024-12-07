@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This is a backup script for a complete backup of my computer, VPS server, and GitHub repositories to the current directory. 
+# This is a backup script for a complete backup of my computer, VPS server, and GitHub repositories to the current directory.
 # This script is intended to be run on an external drive so that the data is downloaded to offline storage.
 
 # color echo functions
@@ -16,13 +16,13 @@ echo_cyan() { echo "\033[0;36m$1\033[0m"; }
 directory_to_backup="/home/lukas/data"
 
 # vps connection properties (backup server data)
-server_user="server-user"
-server_ip="server-ip"
+server_user="server_user"
+server_ip="server_ip"
 server_backup_path="/services/vps-backup.tar.gz"
 
 # github auth token for backup github repositories
-github_username="lukasbecvar"
-github_token="github-token"
+github_username="github_username"
+github_token="github_token"
 
 # github repositories backup path
 github_repositories_path="./projects/github-repositories"
@@ -68,13 +68,13 @@ ssh ${server_user}@${server_ip} "sh /services/x-panel.sh d"
 # check if backup is created on the remote server
 if ssh ${server_user}@${server_ip} "[ -f ${server_backup_path} ]"; then
     echo_green "Backup completed. Downloading the file $server_backup_path"
-    
+
     # download the backup file from the remote server
     scp ${server_user}@${server_ip}:${server_backup_path} ${backup_path}
-    
+
     # notify that the backup has been downloaded
     echo_green "Backup successfully downloaded to $backup_path/vps-backup.tar.gz"
-    
+
     # delete backup archive from the remote server after download
     ssh ${server_user}@${server_ip} "rm -rf ${server_backup_path}"
 else
@@ -90,7 +90,7 @@ ssh ${server_user}@${server_ip} "sh /services/x-panel.sh 99"
 if [ -d $github_repositories_path ]
 then
     rm -rf $github_repositories_path
-    echo_cyan "Old github repositories backup directory deleted"
+    echo_cyan "Old github repositories backup directory deleted."
 fi
 
 # create github repositories backup directory
@@ -148,4 +148,44 @@ if [ ${cloned_zipped_counter} -eq ${total_repositories} ]; then
     echo_green "All repositories were successfully cloned and zipped."
 else
     echo_red "Some repositories were not cloned or zipped."
+fi
+
+# run instagram downloader ########################################################################
+cd ./ig-downloads && bash ig-downloader.sh
+cd ..
+
+# verify that the backup was successful ##########################################################
+# check if backup directory exists
+if [ ! -d "$backup_path" ]; then
+    echo_red "Backup directory $backup_path does not exist!"
+else
+    # check if data directory exists
+    if [ ! -d "$backup_path/data" ]; then
+        echo_red "Data directory is missing in the backup path!"
+    else 
+        echo_green "Data directory found in the backup path."
+    fi
+
+    # check if vps backup file exists
+    if [ ! -f "$backup_path/vps-backup.tar.gz" ]; then
+        echo_red "VPS backup file $backup_path/vps-backup.tar.gz not found!"
+    else 
+        echo_green "VPS backup file found in the backup path."
+    fi
+fi
+
+# check if all GitHub repository zips exist
+for repo_zip in "$github_repositories_path"/*.zip; do
+    if [ ! -f "$repo_zip" ]; then
+        echo_red "GitHub repository zip $repo_zip not found!"
+    else
+        echo_green "Found GitHub repository zip: $repo_zip"
+    fi
+done
+
+# check if all GitHub repository zips exist
+total_zips=$(ls "$github_repositories_path"/*.zip 2>/dev/null | wc -l)
+if [ "$total_zips" -eq 0 ]; then
+    echo_red "No GitHub repository zips found in $github_repositories_path!"
+    overall_status=1
 fi

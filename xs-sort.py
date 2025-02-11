@@ -1,141 +1,125 @@
 #!/bin/python3
 import os
 import re
+import sys
+import shutil
 
-# script for validate and sort xs data storage
+# script for sorting and validation media files storage structure
 
-# path to the storage folder
+# path to data storage (path to directory containing folders for recursive sorting)
 STORAGE_PATH = '/data/storage'
 
-# define color codes
+# bash color codes
 RED = '\033[91m'
 GREEN = '\033[92m'
 YELLOW = '\033[93m'
 CYAN = '\033[96m'
 RESET = '\033[0m'
 
-# check if the root directory contains only folders
-def check_root_directory(path):
-    for item in os.listdir(path):
-        item_path = os.path.join(path, item)
-        if os.path.isfile(item_path):
-            print(f"{RED}Error: File '{item}' detected in the root of storage. Cannot proceed.{RESET}")
-            return False
-    return True
+def two_phase_rename(directory, renames):
+    """Perform renaming in two phases to avoid collisions."""
+    temp_prefix = "tmp_renaming_"
+    intermediate_names = {}
+    for old, final in renames:
+        intermediate = temp_prefix + final
+        intermediate_names[old] = (intermediate, final)
+    for old, (intermediate, final) in intermediate_names.items():
+        os.rename(os.path.join(directory, old), os.path.join(directory, intermediate))
+    for old, (intermediate, final) in intermediate_names.items():
+        os.rename(os.path.join(directory, intermediate), os.path.join(directory, final))
 
-# validate if a file name matches the expected format
-def is_valid_file_name(folder_name, file_name):
-    match = re.match(rf'^{re.escape(folder_name)}_(\d+)\.[a-zA-Z0-9]+$', file_name)
-    return bool(match)
+def check_folder_format(directory):
+    """Ensure all files match expected format and base name matches folder name."""
+    expected_base = os.path.basename(os.path.normpath(directory))
+    pattern = re.compile(r'^(?P<base>.+)_(?P<num>\d+)(-(?P<tempSuffix>\d+))?\.(?P<ext>.+)$')
 
-# validate files in a folder
-def validate_folder(folder_path):
-    folder_name = os.path.basename(folder_path)
-    files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-
-    for file in files:
-        # check if the file starts with a dot or ends with '~'
-        if file.startswith('.'):
-            print(f"{RED}Error: File '{file}' in folder '{folder_name}' is hidden (starts with a dot). Hidden files are not allowed.{RESET}")
-            return False
-        if file.endswith('~'):
-            print(f"{RED}Error: File '{file}' in folder '{folder_name}' ends with '~'. Files ending with '~' are not allowed.{RESET}")
-            return False
-        if ' ' in file:
-            print(f"{RED}Error: File '{file}' in folder '{folder_name}' contains a space. Files cannot contain spaces.{RESET}")
-            return False
-        # check file format
-        if not is_valid_file_name(folder_name, file):
-            print(f"{RED}Error: File '{file}' in folder '{folder_name}' does not have the correct format. Expected format is '{folder_name}_number.format'.{RESET}")
-            return False
-
-    return True
-
-# rename files in a folder only if numbers are missing in the sequence
-def rename_files_in_folder_if_needed(folder_path):
-    folder_name = os.path.basename(folder_path)
-    files = sorted([f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f)) and not f.startswith('.') and not f.endswith('~')])
-
-    file_numbers = []
-    file_extensions = {}
-
-    for file in files:
-        match = re.match(rf'{re.escape(folder_name)}_(\d+)\.([a-zA-Z0-9]+)$', file)
-        if match:
-            file_number = int(match.group(1))
-            file_extension = match.group(2)
-            file_numbers.append(file_number)
-            file_extensions[file_number] = file_extension
-
-    expected_numbers = list(range(1, len(file_numbers) + 1))
-    if file_numbers == expected_numbers:
-        print(f"{GREEN}All files in folder '{folder_name}' are in order. No renaming needed.{RESET}")
-        return False
-
-    # rename files if any number is missing
-    missing_files = False
-    for expected_number in expected_numbers:
-        if expected_number not in file_numbers:
-            missing_files = True
-            break
-
-    if missing_files:
-        expected_number = 1
-        for file_number in sorted(file_numbers):
-            if file_number != expected_number:
-                old_file = f"{folder_name}_{file_number}.{file_extensions[file_number]}"
-                new_file = f"{folder_name}_{expected_number}.{file_extensions[file_number]}"
-                old_file_path = os.path.join(folder_path, old_file)
-                new_file_path = os.path.join(folder_path, new_file)
-                print(f"{YELLOW}Renaming file: {old_file} -> {new_file}{RESET}")
-                os.rename(old_file_path, new_file_path)
-            expected_number += 1
-        return True
-    return False
-
-# validate the entire storage
-def validate_storage(path):
-    if not check_root_directory(path):
-        return False
-
-    folders = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
-
-    for folder in folders:
-        # ignore the folder named '1mix'
-        if folder == '1mix':
-            print(f"{CYAN}Folder '1mix' will be ignored.{RESET}")
+    for f in os.listdir(directory):
+        if f.startswith("tmp_renaming_"):
             continue
+        m = pattern.match(f)
+        if m:
+            base = m.group('base')
+            if base != expected_base:
+                print(f"{RED}Error: '{f}' does not match folder base '{expected_base}'. Aborting.{RESET}")
+                sys.exit(1)
+        else:
+            print(f"{RED}Error: '{f}' does not match expected pattern. Aborting.{RESET}")
+            sys.exit(1)
 
+def process_full_sort(directory):
+    """Sort files in folder, ensuring unique consecutive numbering."""
+    pattern = re.compile(r'^(?P<base>.+)_(?P<num>\d+)(-(?P<tempSuffix>\d+))?\.(?P<ext>.+)$')
+    files = os.listdir(directory)
+    groups = {}
+
+    for f in files:
+        m = pattern.match(f)
+        if not m:
+            continue
+        base = m.group('base')
+        num = int(m.group('num'))
+        ext = m.group('ext')
+        tempSuffix = m.group('tempSuffix')
+        if base not in groups:
+            groups[base] = []
+        sort_key = (num, 0, 0) if tempSuffix is None else (num, 1, int(tempSuffix))
+        groups[base].append((f, sort_key, ext))
+
+    renames = []
+    for base, entries in groups.items():
+        entries_sorted = sorted(entries, key=lambda x: x[1])
+        new_number = 1
+        for old_filename, sort_key, ext in entries_sorted:
+            new_name = f"{base}_{new_number}.{ext}"
+            if old_filename != new_name:
+                print(f"{YELLOW}Renaming: {old_filename} -> {new_name}{RESET}")
+                renames.append((old_filename, new_name))
+            new_number += 1
+
+    return renames
+
+def validate_storage(path):
+    """Check if all directories and files conform to naming rules."""
+    if not os.path.isdir(path):
+        print(f"{RED}Error: '{path}' is not a valid directory.{RESET}")
+        return False
+
+    for folder in os.listdir(path):
+        # exclude 1mix directory from validation
+        if folder == '1mix':
+            print(f"{CYAN}Folder '1mix' will be ignored in validation.{RESET}")
+            continue
         folder_path = os.path.join(path, folder)
-
-        # check for spaces in folder names
+        if not os.path.isdir(folder_path):
+            print(f"{RED}Error: File '{folder}' found in root directory. Aborting.{RESET}")
+            return False
         if ' ' in folder:
-            print(f"{RED}Error: Folder '{folder}' contains a space.{RESET}")
+            print(f"{RED}Error: Folder '{folder}' contains spaces. Aborting.{RESET}")
             return False
-
-        # validate files in the folder
-        if not validate_folder(folder_path):
-            return False
-
+        check_folder_format(folder_path)
     return True
 
-# main function
 def main(path):
+    """Main function to validate and sort storage."""
     print(f"{GREEN}Validating storage...{RESET}")
     if validate_storage(path):
-        print(f"{GREEN}Validation successful. Checking and possibly renaming files...{RESET}")
-        folders = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
-        renamed_files = False
-        for folder in folders:
-            # ignore the folder named '1mix' during renaming
+        print(f"{GREEN}Validation successful. Sorting files...{RESET}")
+        changes_made = False
+        for folder in os.listdir(path):
+            # exclude 1mix directory from storage sorting
             if folder == '1mix':
+                print(f"{CYAN}Folder '1mix' will be ignored in sorting.{RESET}")
                 continue
-            if rename_files_in_folder_if_needed(os.path.join(path, folder)):
-                renamed_files = True
-        if not renamed_files:
-            print(f"{GREEN}All files are in order. No renaming needed.{RESET}")
+            folder_path = os.path.join(path, folder)
+            if os.path.isdir(folder_path):
+                renames = process_full_sort(folder_path)
+                if renames:
+                    two_phase_rename(folder_path, renames)
+                    changes_made = True
+        if not changes_made:
+            print(f"{GREEN}No renaming needed in any folder.{RESET}")
     else:
-        print(f"{RED}Storage is not valid. Renaming will not be performed.{RESET}")
+        print(f"{RED}Storage validation failed. Sorting will not be performed.{RESET}")
 
-# run validator process
-main(STORAGE_PATH)
+if __name__ == '__main__':
+    main(STORAGE_PATH)

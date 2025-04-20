@@ -2,6 +2,11 @@
 
 # update discord app without official package
 
+if pgrep -x "Discord" > /dev/null; then
+    echo "Discord is currently running. Please close it before updating."
+    exit 1
+fi
+
 get_installed_version() {
     local installed_version=$(dpkg-query -W -f='${Version}\n' discord 2>/dev/null)
     echo $installed_version
@@ -21,7 +26,7 @@ update_discord() {
 
     echo "$temp_dir tmp dir"
     echo "$download_path path"
-    
+
     echo "Download the latest version of Discord..."
     curl -# -L -o $download_path $download_url
 
@@ -59,3 +64,6 @@ if [ -n "$latest_version_url" ]; then
 else
     echo "Unable to get the latest version of Discord from the API."
 fi
+
+# start discor after update
+/usr/share/discord/Discord

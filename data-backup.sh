@@ -59,9 +59,6 @@ fi
 # backup server data ##############################################################################
 echo_cyan "Starting backup script on the server $server_user@$server_ip"
 
-# run cleanup script process on the server
-ssh ${server_user}@${server_ip} "sh /services/x-panel.sh b"
-
 # run backup script process on the server
 ssh ${server_user}@${server_ip} "sh /services/x-panel.sh d"
 

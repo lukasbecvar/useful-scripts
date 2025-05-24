@@ -44,19 +44,21 @@ case $selector in
 		sudo rm -rf ~/.minikube
 		sudo rm -rf ~/.anydesk
 		sudo rm -rf ~/.android
-		sudo rm -rf ~/.mozilla
+		#sudo rm -rf ~/.mozilla
 		sudo rm -rf ~/.lesshst
 		sudo rm -rf ~/.docker
 		sudo rm -rf ~/.dotnet
 		sudo rm -rf ~/.spotdl
+		sudo rm -rf ~/.siege
 		sudo rm -rf ~/.rpmdb
 		sudo rm -rf ~/.cargo
 		sudo rm -rf ~/.java
+		sudo rm -rf ~/.jdks
+		sudo rm -rf ~/.java
+		sudo rm -rf ~/.kube
 		sudo rm -rf ~/.npm
 		sudo rm -rf ~/.pki
 		sudo rm -rf ~/.rnd
-		sudo rm -rf ~/.java
-		sudo rm -rf ~/.jdks
 		sudo rm -rf ~/.m2
 
 		# delete root directories

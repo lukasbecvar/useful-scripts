@@ -18,6 +18,10 @@ case $selector in
 		sudo apt upgrade -y
 		sudo apt autoremove -y
 
+	        # clean pip cache 
+	        pip cache purge
+	        pip3 cache purge
+
 		# logs delete
 		echo "Delete logs..."
 		sudo find /var/log -type f -delete

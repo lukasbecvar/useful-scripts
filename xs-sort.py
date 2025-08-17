@@ -2,11 +2,10 @@
 import os
 import re
 import sys
-import shutil
 
 # script for sorting and validation media files storage structure
 
-# path to data storage (path to directory containing folders for recursive sorting)
+# default path to data storage (if no path argument is given)
 STORAGE_PATH = '/data/storage'
 
 # bash color codes
@@ -122,4 +121,9 @@ def main(path):
         print(f"{RED}Storage validation failed. Sorting will not be performed.{RESET}")
 
 if __name__ == '__main__':
-    main(STORAGE_PATH)
+    # if path argument provided, use it; otherwise fall back to default STORAGE_PATH
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+    else:
+        path = STORAGE_PATH
+    main(path)

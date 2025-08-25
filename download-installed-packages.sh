@@ -9,7 +9,6 @@ echo "Do you want to download all installed packages?"
 echo "[YES or NO]: "
 
 read selector
-
 case $selector in
     yes|YES)
         # get installed packages list

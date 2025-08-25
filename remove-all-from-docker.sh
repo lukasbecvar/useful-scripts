@@ -2,9 +2,6 @@
 
 # delete all resources from docker env
 
-# clear console
-clear
-
 # stop all docker containers
 sudo docker stop $(sudo docker ps -aq)
 

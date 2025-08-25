@@ -21,8 +21,10 @@ for file in "$INPUT_DIR"/*.{mkv,mov,avi,flv,wmv}; do
     name="${filename%.*}"
     output="$OUTPUT_DIR/$name.mp4"
 
+    # print status msg
     echo "▶️ Converting: $file → $output"
 
+    # use ffmpeg to convert video file
     ffmpeg -i "$file" \
         -map 0 \
         -c:v copy \
@@ -31,5 +33,4 @@ for file in "$INPUT_DIR"/*.{mkv,mov,avi,flv,wmv}; do
         "$output"
 done
 shopt -u nullglob
-
 echo "✅ All done!"

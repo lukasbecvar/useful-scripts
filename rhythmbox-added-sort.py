@@ -60,4 +60,3 @@ tree.write(db_path, encoding='utf-8', xml_declaration=True)
 # print colored output using bash color codes
 print(f"{GREEN}The database has been sorted and 'first-seen' times have been updated.{RESET}")
 print(f"{YELLOW}You can now sort by 'Added Time' in Rhythmbox.{RESET}")
-

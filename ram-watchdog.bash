@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script is a simple RAM watchdog that alerts you when your RAM usage exceeds a certain threshold.
+
 # RAM threshold in MB (e.g., 20 GB = 20480)
 THRESHOLD=20480
 INTERVAL=2
@@ -13,28 +15,25 @@ CYAN="\e[36m"
 BOLD="\e[1m"
 RESET="\e[0m"
 
-# RAM status header
-print_header() {
-	echo -e "${BOLD}${CYAN}==[ RAM WATCHDOG ]==${RESET}"
-}
+# check if command is bash
+if [ -z "$BASH_VERSION" ]; then
+    echo "\e[31mPlease run this script with bash command.\e[0m"
+    exit 1
+fi
 
-# log ram status
-log_ram() {
+while true; do
+	echo -e "${BOLD}${CYAN}==[ RAM WATCHDOG ]==${RESET}"
 	read total used free <<<$(free -m | awk '/^Mem:/ { print $2, $3, $4 }')
 	echo -e "${YELLOW}Time: $(date '+%H:%M:%S')${RESET}"
 	echo -e "${GREEN}Total RAM:${RESET} ${total} MB"
 	echo -e "${CYAN}Used RAM:${RESET}  ${used} MB"
 	echo -e "${YELLOW}Free RAM:${RESET}  ${free} MB"
 	echo ""
-}
 
-while true; do
-	clear
-	print_header
-	log_ram
-
+	# check RAM usage
 	used_ram=$(free -m | awk '/^Mem:/ { print $3 }')
 
+	# check if RAM usage exceeds threshold
 	if [ "$used_ram" -gt "$THRESHOLD" ]; then
 		if [ "$alert_sent" = false ]; then
 	  		echo -e "${RED}${BOLD}⚠️ RAM usage exceeded ${THRESHOLD}MB! Triggering notification...${RESET}"

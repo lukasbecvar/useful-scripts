@@ -6,7 +6,7 @@ import sys
 # script for sorting and validation media files storage structure
 
 # default path to data storage (if no path argument is given)
-STORAGE_PATH = '/data/storage'
+STORAGE_PATH = '/data/storag/media'
 
 # bash color codes
 RED = '\033[91m'

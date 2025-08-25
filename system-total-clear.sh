@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# clear system temp & user home
+# clear system temp & user home cache, logs, etc
 
 # clear console
 clear
@@ -9,7 +9,6 @@ echo "Total temp, cache, etc clean, [reboot required!]\n"
 echo "[YES or NO]: "
 
 read selector
-
 case $selector in
 	yes|YES)
 		# system update
@@ -18,9 +17,10 @@ case $selector in
 		sudo apt upgrade -y
 		sudo apt autoremove -y
 
-	        # clean pip cache 
-	        pip cache purge
-	        pip3 cache purge
+		# clean pip cache
+		echo "Clean pip cache..."
+		pip cache purge
+		pip3 cache purge
 
 		# logs delete
 		echo "Delete logs..."
@@ -48,11 +48,12 @@ case $selector in
 		sudo rm -rf ~/.minikube
 		sudo rm -rf ~/.anydesk
 		sudo rm -rf ~/.android
-		#sudo rm -rf ~/.mozilla
+		sudo rm -rf ~/.mozilla
 		sudo rm -rf ~/.lesshst
 		sudo rm -rf ~/.docker
 		sudo rm -rf ~/.dotnet
 		sudo rm -rf ~/.spotdl
+		sudo rm -rf ~/.gradle
 		sudo rm -rf ~/.siege
 		sudo rm -rf ~/.rpmdb
 		sudo rm -rf ~/.cargo
@@ -63,6 +64,7 @@ case $selector in
 		sudo rm -rf ~/.npm
 		sudo rm -rf ~/.pki
 		sudo rm -rf ~/.rnd
+		sudo rm -rf ~/.ssr
 		sudo rm -rf ~/.m2
 
 		# delete root directories
@@ -77,8 +79,8 @@ case $selector in
 
 		# poweroff
 		echo "poweroff system!!!"
-		sudo poweroff
-		#sudo reboot
+		#sudo poweroff
+		sudo reboot
 	;;
     no|NO)
 		echo "Process exited."

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# usage bash ig-downloader.bash --full (full flag = download stories, highlights & tagged)
+# usage: bash ig-downloader.bash --full (full flag = download stories, highlights & tagged)
 
 # check if command is bash
 if [ -z "$BASH_VERSION" ]; then

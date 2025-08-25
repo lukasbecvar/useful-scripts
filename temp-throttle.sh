@@ -1,8 +1,14 @@
 #!/bin/bash
 
-# Usage: temp_throttle.sh --max-temp=65 --max-freq=auto
+# Usage: temp_throttle.sh --max-temp=80 --max-freq=auto
 # Original script: https://github.com/Sepero/temp-throttle
 # USE CELSIUS TEMPERATURES
+
+# check if command is bash
+if [ -z "$BASH_VERSION" ]; then
+    echo "\e[31mPlease run this script with bash command.\e[0m"
+    exit 1
+fi
 
 # generic function for printing an error
 err_exit () {

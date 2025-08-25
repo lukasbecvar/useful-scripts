@@ -13,7 +13,7 @@ echo_cyan() { echo "\033[0;36m$1\033[0m"; }
 
 # PATH AND PROPERTIES CONFIG ######################################################################
 # local data to backup path
-directory_to_backup="/home/lukas/data"
+directory_to_backup="/drives/second-disk/data"
 
 # vps connection properties (backup server data)
 server_user="server_user"
@@ -147,11 +147,7 @@ else
     echo_red "Some repositories were not cloned or zipped."
 fi
 
-# run instagram downloader ########################################################################
-cd ./ig-downloads && bash ig-downloader.sh
-cd ..
-
-# verify that the backup was successful ##########################################################
+# verify if backup was successful ##########################################################
 # check if backup directory exists
 if [ ! -d "$backup_path" ]; then
     echo_red "Backup directory $backup_path does not exist!"

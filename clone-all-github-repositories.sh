@@ -9,6 +9,11 @@ github_token="api-token"
 # output directory for cloned repositories
 output_directory="./github-repositories"
 
+# bash color codes
+green='\033[0;32m'
+red='\033[0;31m'
+reset='\033[0m'
+
 # delete output directory if it already exists
 rm -rf ${output_directory}
 
@@ -20,10 +25,6 @@ api_url="https://api.github.com/user/repos"
 
 # fetch repositories using GitHub API and clone them
 repositories=$(curl -s -H "Authorization: token ${github_token}" ${api_url}?per_page=100 | jq -r '.[].ssh_url')
-
-green='\033[0;32m'
-red='\033[0;31m'
-reset='\033[0m'
 
 # counter for total repositories
 total_repositories=$(echo "${repositories}" | wc -l)

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# clear system temp & user home cache, logs, etc
+# clear system temp & user home
 
 # clear console
 clear
@@ -9,16 +9,18 @@ echo "Total temp, cache, etc clean, [reboot required!]\n"
 echo "[YES or NO]: "
 
 read selector
+
 case $selector in
 	yes|YES)
 		# system update
 		echo "System update..."
 		sudo apt update -y
 		sudo apt upgrade -y
+		sudo apt-get clean -y
 		sudo apt autoremove -y
+		sudo apt-get autoclean -y
 
 		# clean pip cache
-		echo "Clean pip cache..."
 		pip cache purge
 		pip3 cache purge
 
@@ -29,6 +31,11 @@ case $selector in
 		# temp delete
 		echo "Delete temp..."
 		sudo rm -r /tmp/*
+
+		# clean old system backups
+		echo "Delete system backup..."
+		sudo find /var/backups -type f -name '*.gz' -mtime +30 -delete
+		sudo find /var/backups -type f -name '*.old' -delete
 
 		# cache & trash files delete
 		sudo rm -r ~/.cache/*
@@ -49,6 +56,7 @@ case $selector in
 		sudo rm -rf ~/.anydesk
 		sudo rm -rf ~/.android
 		sudo rm -rf ~/.mozilla
+		sudo rm -rf ~/.openjfx
 		sudo rm -rf ~/.lesshst
 		sudo rm -rf ~/.docker
 		sudo rm -rf ~/.dotnet
@@ -79,8 +87,8 @@ case $selector in
 
 		# poweroff
 		echo "poweroff system!!!"
-		#sudo poweroff
-		sudo reboot
+		sudo poweroff
+		#sudo reboot
 	;;
     no|NO)
 		echo "Process exited."

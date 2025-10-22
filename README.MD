@@ -1,4 +1,4 @@
-# useful-scripts
+# Useful scripts
 Collection of my useful scripts.
 
 ## License

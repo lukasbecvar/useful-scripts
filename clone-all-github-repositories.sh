@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script clones all GitHub repositories for a user, zips them individually, and then deletes the directories
+# This script clones all GitHub repositories and zips them individually
 
 # github username and personal access token
 github_username="lukasbecvar"

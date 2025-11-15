@@ -32,8 +32,8 @@ api_url="https://api.github.com/user/repos"
 ###################################################################################################
 
 # build backup path
-year=$(date +"%Y")
-date=$(date +"%d_%m_%Y")
+year=$(date +'%Y')
+date=$(date +'%Y_%m_%d')
 backup_path="./backups/$year/$date"
 
 # create backup directory if not exists

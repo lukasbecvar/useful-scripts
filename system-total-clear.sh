@@ -58,10 +58,12 @@ case $selector in
 		sudo rm -rf ~/.mozilla
 		sudo rm -rf ~/.openjfx
 		sudo rm -rf ~/.lesshst
+		sudo rm -rf ~/.cursor
 		sudo rm -rf ~/.docker
 		sudo rm -rf ~/.dotnet
 		sudo rm -rf ~/.spotdl
 		sudo rm -rf ~/.gradle
+		sudo rm -rf ~/.codex
 		sudo rm -rf ~/.siege
 		sudo rm -rf ~/.rpmdb
 		sudo rm -rf ~/.cargo
@@ -87,8 +89,8 @@ case $selector in
 
 		# poweroff
 		echo "poweroff system!!!"
-		sudo poweroff
-		#sudo reboot
+		#sudo poweroff
+		sudo reboot
 	;;
     no|NO)
 		echo "Process exited."
